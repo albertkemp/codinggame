@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coding Game (made with P5js)</title>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+</head>
+<body>
+<audio src="audio/project15 - 6:9:2023, 7.03 am.mp3" autoplay loop></audio>
+<script>
+let x = 200;
+let y = 200;
+let steps = [];
+let forwardButton;
+let runButton;
+let stepx = 200;
+let stepIndex = 0; // Track the current step index for animation
+let blocks = []; // Store the positions of the blocks
+let carrot1;
+let carrot2;
+let carrot3;
+let carrots = []; // Store the positions of the carrots
+
+function setup() {
+  createCanvas(700, 670);
+  forwardButton = createButton('⇨');
+  forwardButton.style('font-size', '50px');
+  forwardButton.style('background-color', 'rgb(0, 255, 0)');
+  forwardButton.style('cursor', 'pointer');
+  forwardButton.position(190, 500);
+  forwardButton.style('border-radius', '5px');
+  forwardButton.size(70, 70);
+  forwardButton.mousePressed(forward);
+  runButton = createButton('▷');
+  runButton.style('font-size', '50px');
+  runButton.style('background-color', 'orange');
+  runButton.style('cursor', 'pointer');
+  runButton.style('color', 'white');
+  runButton.style('border-radius', '50%');
+  runButton.position(515, 395);
+  runButton.size(100, 100);
+  runButton.mousePressed(runSteps);
+  
+  // Initialize carrot positions
+  carrots.push({ x: 350, y: 290, eaten: false });
+  carrots.push({ x: 450, y: 290, eaten: false });
+  carrots.push({ x: 550, y: 290, eaten: false });
+}
+
+function draw() {
+  background(3, 252, 244);
+  fill(0);
+  textSize(52);
+  text("Let's get to the party!", 100, 60);
+  textSize(32);
+  text("Collect carrots using the code blocks.", 100, 100);
+  fill(84, 184, 255);
+  rect(180, 180, 440, 400);
+  fill(139, 69, 19);
+  rect(190, 190, 420, 200);
+  rect(200, 200, 100);
+  rect(300, 200, 100);
+  rect(400, 200, 100);
+  rect(500, 200, 100);
+  fill(47, 158, 147);
+  rect(190, 400, 320, 90);
+  // Draw carrots if they haven't been eaten
+  for (let carrot of carrots) {
+    if (!carrot.eaten) {
+      fill(255, 149, 0);
+      triangle(carrot.x, carrot.y, carrot.x - 20, carrot.y - 80, carrot.x + 20, carrot.y - 80);
+    }
+  }
+fill(255);
+
+// Draw the main rectangle
+  textSize(100);
+text("🐰", x, y+70);
+
+//triangle(x + 80, y - 30, x + 120, y - 60, x + 150, y - 30); // Right ear
+
+  // Draw blocks in the tray
+  for (let block of blocks) {
+    fill(0, 255, 0);
+    rect(block.x, 410, 70, 70);
+    fill(0);
+    textSize(32);
+    text('⇨', block.x + 10, 450);
+  }
+
+  // Check for carrot collisions
+  for (let i = 0; i < carrots.length; i++) {
+    if (!carrots[i].eaten && x + 50 >= carrots[i].x && x <= carrots[i].x + 40) {
+      // Carrot collision detected
+      carrots[i].eaten = true;
+    }
+  }
+}
+
+function forward() {
+  // This function is called when the "Forward" button is pressed
+  addStep('forward');
+}
+
+function addStep(step) {
+  steps.push(step);
+  console.log("Added step: " + step);
+  addBlock(stepx);
+  stepx += 80; // Increment stepx for the next block
+}
+
+function runSteps() {
+  if (stepIndex < steps.length) {
+    if (steps[stepIndex] === 'forward') {
+      x += 100;
+      stepIndex++;
+      setTimeout(runSteps, 500); // Delay between steps (500 milliseconds)
+    }
+  }
+}
+
+function addBlock(x) {
+  blocks.push({ x: x });
+}
+
+
+</script>
+</body>
+
+</html>
